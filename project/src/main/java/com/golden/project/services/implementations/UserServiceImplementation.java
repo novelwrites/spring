@@ -25,7 +25,7 @@ public class UserServiceImplementation implements UserServices { //makes all the
     }
 
     @Override
-    public User getUser(Long id) { //takes in an id with a data type of long
+    public User getUserById(Long id) { //takes in an id with a data type of long
         Optional<User> user = userRepository.findById(id);
         return user.get();
     }
@@ -35,9 +35,25 @@ public class UserServiceImplementation implements UserServices { //makes all the
         userRepository.save(user);
 
     }
-//My new code - why does this method get abstract error but other ones do not?
+
+    @Override
+    public User getUserByEmail(String email) {
+        User returnUser = userRepository.findByEmail(email);
+        return returnUser;
+    }
+
+    @Override
+    public void updateUser(User user) {
+        ArrayList<User> users = (ArrayList<User>) userRepository.findAll(); //creating an array list object of users
+        for(int i = 0;i < users.size(); i++) {
+            if(users.get(i).getId() == user.getId()) {
+                userRepository.save(user);
+            }
+        }
+    }
+
     @Override
     public void deleteUser(Long id) { //delete a user
-        userRepository.deleteById(id);
+       userRepository.deleteById(id);
     }
 }

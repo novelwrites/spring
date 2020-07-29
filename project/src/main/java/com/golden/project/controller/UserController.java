@@ -24,8 +24,8 @@ public class UserController {
     }
 
     @GetMapping(path="/{id}") //id is how we get single user from database
-    public User getSingleUser(@PathVariable Long id) { //path varies according to the id
-        User user = userServices.getUser(id); //gets all of the information for that id - userServices is the
+    public User getUserById(@PathVariable Long id) { //path varies according to the id
+        User user = userServices.getUserById(id); //gets all of the information for that id - userServices is the
         //interface and it is calling the method get User and bringing in the information from the database attached
         //to the id.
         return user;
@@ -38,13 +38,21 @@ public class UserController {
     }
 
     //My new code starts here
-    //@PutMapping(path="/{id}") //This is where we update a user in the database
-    //public void updateUser(@PathVariable Long id) {
-        //userServices.updateUser(updateUser(id));
-    //}
+    @PutMapping //This is where we update a user in the database
+    public void updateUser(@RequestBody User user) {
+        userServices.updateUser(user);
+    }
 
     @DeleteMapping(path="/{id}") //This is where we delete a user in the database
     public void deleteUser(@PathVariable Long id) {
         userServices.deleteUser(id);
     }
+
+    @GetMapping(path="/email/{email}")
+    public User getUserByEmail(@PathVariable String email) {
+        User oneUser = userServices.getUserByEmail(email);
+        return oneUser;
+    }
+
+
 }

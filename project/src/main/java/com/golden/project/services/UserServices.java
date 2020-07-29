@@ -7,13 +7,14 @@ import com.golden.project.model.User;
 public interface UserServices {
     List<User> getAllUsers();
 
-    User getUser(Long id);
+    User getUserById(Long id);
 
     void addUser(User user);
 
-    //My new code here
+    User getUserByEmail(String email);
 
-    void updateUser(Long id);
+    void updateUser(User user);
+
 
     void deleteUser(Long id);
 }
