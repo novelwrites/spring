@@ -36,6 +36,15 @@ public class UserController {
         //of the post request
         userServices.addUser(user);
     }
-    
 
+    //My new code starts here
+    //@PutMapping(path="/{id}") //This is where we update a user in the database
+    //public void updateUser(@PathVariable Long id) {
+        //userServices.updateUser(updateUser(id));
+    //}
+
+    @DeleteMapping(path="/{id}") //This is where we delete a user in the database
+    public void deleteUser(@PathVariable Long id) {
+        userServices.deleteUser(id);
+    }
 }

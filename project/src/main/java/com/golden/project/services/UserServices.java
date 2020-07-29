@@ -10,4 +10,10 @@ public interface UserServices {
     User getUser(Long id);
 
     void addUser(User user);
+
+    //My new code here
+
+    void updateUser(Long id);
+
+    void deleteUser(Long id);
 }

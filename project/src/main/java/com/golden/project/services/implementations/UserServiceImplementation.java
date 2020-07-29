@@ -35,4 +35,9 @@ public class UserServiceImplementation implements UserServices { //makes all the
         userRepository.save(user);
 
     }
+//My new code - why does this method get abstract error but other ones do not?
+    @Override
+    public void deleteUser(Long id) { //delete a user
+        userRepository.deleteById(id);
+    }
 }
