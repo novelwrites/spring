@@ -1,9 +1,9 @@
 package com.golden.project.dao;
 
 import com.golden.project.model.User;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface UserRepository extends CrudRepository<User, Long> {
-    User findByEmail(String email); //Has ALL the methods for the database calls
-
+public interface UserRepository extends PagingAndSortingRepository<User, Long> {
+    User findByEmail(String email);
+    User findByUserId(String userId);
 }

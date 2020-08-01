@@ -1,8 +1,13 @@
 package com.golden.project.services.implementations;
 
 import com.golden.project.dao.UserRepository;
+import com.golden.project.dto.UserDTO;
 import com.golden.project.model.User;
 import com.golden.project.services.UserServices;
+import com.golden.project.utilities.Utils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -10,50 +15,66 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServiceImplementation implements UserServices { //makes all the actual calls from the repo
-    private UserRepository userRepository;
-
-
-    public UserServiceImplementation(UserRepository userRepository) {
-        this.userRepository = userRepository;
+public class UserServiceImplementation implements UserServices {
+    private Utils utils;
+    private UserRepository repo;
+    public UserServiceImplementation(UserRepository repo, Utils utils) {
+        this.repo = repo;
+        this.utils = utils;
     }
-
     @Override
-    public List<User> getAllUsers() { //gets all users
-        ArrayList<User> users = (ArrayList<User>) userRepository.findAll();
-        return users;
+    public List<UserDTO> getAllUsers(int page, int limit) {
+        List<User> userList = new ArrayList<User>();
+        if (page>0) page --;
+        PageRequest pageableRequest = PageRequest.of(page, limit);
+        Page<User> userPageList = repo.findAll(pageableRequest);
+        userList = userPageList.getContent();
+        List<UserDTO> userDtoList = new ArrayList<UserDTO>();
+        for ( int i = 0; i < userList.size(); i++) {
+            UserDTO userDto = new UserDTO();
+            BeanUtils.copyProperties(userList.get(i), userDto);
+            userDtoList.add(userDto);
+        }
+        return userDtoList;
     }
-
     @Override
-    public User getUserById(Long id) { //takes in an id with a data type of long
-        Optional<User> user = userRepository.findById(id);
-        return user.get();
+    public UserDTO getUserByUserId(String userId) {
+        User user = repo.findByUserId(userId);
+        UserDTO returnValue = new UserDTO();
+        BeanUtils.copyProperties(user, returnValue);
+        return returnValue;
     }
-
     @Override
-    public void addUser(User user) { //create a user
-        userRepository.save(user);
-
-    }
-
-    @Override
-    public User getUserByEmail(String email) {
-        User returnUser = userRepository.findByEmail(email);
+    public UserDTO createUser(UserDTO userDto) {
+        User user = new User();
+        BeanUtils.copyProperties(userDto, user);
+        user.setEncryptedPassword("password-test");
+        user.setEmailVerification(true);
+        user.setUserId(utils.generateUserId(20));
+        User createdUser = repo.save(user);
+        UserDTO returnUser = new UserDTO();
+        BeanUtils.copyProperties(createdUser, returnUser);
         return returnUser;
     }
-
     @Override
-    public void updateUser(User user) {
-        ArrayList<User> users = (ArrayList<User>) userRepository.findAll(); //creating an array list object of users
-        for(int i = 0;i < users.size(); i++) {
-            if(users.get(i).getId() == user.getId()) {
-                userRepository.save(user);
-            }
-        }
+    public UserDTO updateUser(UserDTO userDto) {
+        User foundUser = repo.findByUserId(userDto.getUserId());
+        BeanUtils.copyProperties(userDto, foundUser);
+        User updatedUser = repo.save(foundUser);
+        UserDTO returnValue = new UserDTO();
+        BeanUtils.copyProperties(updatedUser, returnValue);
+        return returnValue;
     }
-
     @Override
-    public void deleteUser(Long id) { //delete a user
-       userRepository.deleteById(id);
+    public void deleteUser(String userId) {
+        User foundUser = repo.findByUserId(userId);
+        repo.delete(foundUser);
+    }
+    @Override
+    public UserDTO getUserByEmail(String email) {
+        User foundUser = repo.findByEmail(email);
+        UserDTO returnValue = new UserDTO();
+        BeanUtils.copyProperties(foundUser, returnValue);
+        return returnValue;
     }
 }

@@ -1,42 +1,31 @@
-package com.golden.project.model;
+package com.golden.project.dto;
 
+public class UserDTO {
 
-import javax.persistence.*;
-
-@Entity //tells Spring to watch for this class as a model
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private String userId;
-
-    @Column(nullable = false)
     private String first_name;
-
-    @Column(nullable = false)
     private String last_name;
-
-    @Column(nullable = false, unique =true)
     private String email;
-
-    @Column(nullable = false)
+    private String password;
     private String encryptedPassword;
-
     private boolean emailVerification;
 
-    public User() {
+    public UserDTO() {
+
     }
-    public User(Long id, String userId, String first_name, String last_name, String email, String encryptedPassword, boolean emailVerification) {
+
+    public UserDTO(Long id, String userId, String first_name, String last_name, String email, String password, String encryptedPassword, boolean emailVerification) {
         this.id = id;
         this.userId = userId;
         this.first_name = first_name;
         this.last_name = last_name;
         this.email = email;
+        this.password = password;
         this.encryptedPassword = encryptedPassword;
         this.emailVerification = emailVerification;
     }
+
 
     public Long getId() {
         return id;
@@ -76,6 +65,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getEncryptedPassword() {

@@ -1,20 +1,22 @@
 package com.golden.project.services;
 import java.util.List;
+
+import com.golden.project.dto.UserDTO;
 import com.golden.project.model.User;
 
 //creating interface for all of the methods we are going to be using in the user controller
 
 public interface UserServices {
-    List<User> getAllUsers();
 
-    User getUserById(Long id);
+    List<UserDTO> getAllUsers(int page, int limit);
 
-    void addUser(User user);
+    UserDTO getUserByUserId(String userId);
 
-    User getUserByEmail(String email);
+    UserDTO createUser(UserDTO userDTO);
 
-    void updateUser(User user);
+    UserDTO getUserByEmail(String email);
 
+    UserDTO updateUser(UserDTO userDTO);
 
-    void deleteUser(Long id);
+    void deleteUser(String userId);
 }
